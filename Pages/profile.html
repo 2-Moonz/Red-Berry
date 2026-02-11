@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/Pages/styles/red-berry.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px;">
+            <a href="/Pages/red-berry.html" style="color:var(--cream); text-decoration:none; font-weight:600;">← Back</a>
+            <h2 style="margin:0; color:var(--cream);">Profile</h2>
+        </div>
+    </nav>
+
+    <main style="max-width:800px;margin:80px auto;padding:20px; color:var(--cream);">
+        <section style="background:var(--card-bg); padding:20px; border:1px solid var(--border); border-radius:10px;">
+            <div style="display:flex; gap:20px; align-items:flex-start;">
+                <div style="width:140px; text-align:center;">
+                    <img id="profile-avatar" src="" alt="avatar" style="width:120px;height:120px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,0.08);" />
+                    <div style="margin-top:10px;">
+                        <input id="avatar-file" type="file" accept="image/*" />
+                    </div>
+                </div>
+                <div style="flex:1;">
+                    <label style="display:block;color:#bbb;margin-bottom:6px;">Username</label>
+                    <div id="profile-username" style="font-weight:700;font-size:1.1rem;margin-bottom:12px;color:var(--cream);"></div>
+
+                    <label style="display:block;color:#bbb;margin-bottom:6px;">Display name</label>
+                    <input id="profile-display" style="width:100%;padding:8px;margin-bottom:12px;background:transparent;border:1px solid rgba(255,255,255,0.06);border-radius:6px;color:var(--cream);" />
+
+                    <label style="display:block;color:#bbb;margin-bottom:6px;">Bio</label>
+                    <textarea id="profile-bio" rows="4" style="width:100%;padding:8px;background:transparent;border:1px solid rgba(255,255,255,0.06);border-radius:6px;color:var(--cream);"></textarea>
+
+                    <div style="margin-top:12px;display:flex;gap:8px;">
+                        <button id="save-profile" class="btn-join">Save</button>
+                        <button id="sign-out" class="btn-join" style="background:#333;">Sign out</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="max-width:800px;margin-top:16px;color:var(--cream);">
+            <div style="background:var(--card-bg); padding:16px; border:1px solid var(--border); border-radius:8px;">
+                <h3 style="margin-top:0;">Communities</h3>
+                <div style="display:flex;gap:12px;">
+                    <div style="flex:1;">
+                        <h4 style="margin:6px 0;color:#bbb;">Joined</h4>
+                        <div id="joined-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+                    </div>
+                    <div style="flex:1;">
+                        <h4 style="margin:6px 0;color:#bbb;">Owned</h4>
+                        <div id="owned-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/Pages/JS/profile.js"></script>
+</body>
+</html>

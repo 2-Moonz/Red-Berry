@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura // The Midnight Feed</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/Pages/styles/red-berry.css">
+</head>
+<body>
+
+    <nav>
+        <div class="nav-left">
+            <i id="profile-toggle" class="fa-solid fa-circle-user profile-icon-top" title="Profile"></i>
+            <a href="#" class="logo">Aura.</a>
+        </div>
+        
+        <input type="text" class="search-bar" placeholder="Search the midnight...">
+        
+        <ul class="nav-links">
+            <li><i class="fa-solid fa-fire"></i></li>
+            <li><i class="fa-solid fa-chart-line"></i></li>
+            <li id="nav-community"><i class="fa-solid fa-comment-dots" title="Communities"></i></li>
+        </ul>
+    </nav>
+
+    <div class="blob-container">
+        <div class="shining-circle"></div>
+    </div>
+
+    <main class="main-container">
+        <!-- Left floating user list -->
+        <div id="left-user-list" style="position:fixed; left:12px; top:100px; width:160px; color:var(--cream); z-index:900;">
+            <h4 style="margin:0 0 8px 0; font-size:0.95rem;">Active users</h4>
+            <div id="user-list-items" style="display:flex; flex-direction:column; gap:6px;"></div>
+        </div>
+
+        <!-- Community page (hidden by default) -->
+        <section id="community-page" style="display:none; padding:20px;">
+            <h2>Explore Community</h2>
+            <div id="community-info"></div>
+            <div id="community-actions" style="margin-top:12px;"></div>
+            <div id="moderation-center" style="margin-top:18px; display:none;">
+                <h3>Moderation Center</h3>
+                <div id="mod-posts"></div>
+                <h4 style="margin-top:12px;">Users</h4>
+                <div id="mod-users"></div>
+            </div>
+            <button id="close-community" class="btn-join" style="margin-top:12px;">Close</button>
+        </section>
+        <section class="feed">
+            <article class="post-card" id="post-1" data-post-id="post-1">
+                <div class="votes">
+                    <i class="fa-solid fa-arrow-up vote-up" title="Upvote"></i>
+                    <span class="vote-count">0</span>
+                    <i class="fa-solid fa-arrow-down vote-down" title="Downvote"></i>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">Posted by u/ShadowWalker • 5h ago</div>
+                    <span class="post-title">The way the light hits the fog...</span>
+                    <p class="post-body">There's a specific kind of magic in the silence of the night.</p>
+                    <div class="post-footer">
+                        <span class="share-btn" data-post-id="post-1"><i class="fa-solid fa-share"></i> Share</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="post-card" id="post-2" data-post-id="post-2">
+                <div class="votes">
+                    <i class="fa-solid fa-arrow-up vote-up" title="Upvote"></i>
+                    <span class="vote-count">0</span>
+                    <i class="fa-solid fa-arrow-down vote-down" title="Downvote"></i>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">Posted by u/NeonDreamer • 12h ago</div>
+                    <span class="post-title">Midnight Glow CSS shader</span>
+                    <p class="post-body">I've been working on a new animation for the background.</p>
+                    <div class="post-footer">
+                        <span class="share-btn" data-post-id="post-2"><i class="fa-solid fa-share"></i> Share</span>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <aside class="sidebar">
+            <div class="sidebar-box">
+                <div class="community-header"></div>
+                <h3>r/MidnightAura</h3>
+                <p style="font-size: 0.85rem; color: #bbb;">Aesthetic dark-mode narratives.</p>
+
+                <div id="auth-area">
+                    <div id="auth-controls">
+                        <button id="open-login-btn" class="btn-join">Log in / Create</button>
+                    </div>
+
+                    <div id="profile-summary" style="display:none;">
+                        <div id="profile-name" style="font-weight:600;"></div>
+                        <div id="profile-username" style="color:#bbb; font-size:0.9rem;"></div>
+                        <div style="margin-top:8px; display:flex; gap:8px;">
+                            <button id="edit-profile-btn" class="btn-join">Edit Profile</button>
+                            <button id="btn-logout" class="btn-join">Sign Out</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-join" id="btn-join-community">Join Community</button>
+                <button class="btn-new-post" id="open-post-btn">+ New Post</button>
+
+                <div class="create-post" id="create-post" style="display:none;">
+                    <input id="post-title" placeholder="Title" />
+                    <textarea id="post-body" rows="3" placeholder="Write something..."></textarea>
+                    <button id="submit-post" class="btn-join">Post</button>
+                </div>
+
+                <div id="profile-edit" style="display:none; margin-top:10px;">
+                    <input id="edit-display" placeholder="Display name" />
+                    <textarea id="edit-bio" rows="3" placeholder="Bio"></textarea>
+                    <div style="display:flex; gap:8px; margin-top:8px;">
+                        <button id="save-profile" class="btn-join">Save</button>
+                        <button id="cancel-edit" class="btn-join">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <footer class="black-footer">
+        <div class="footer-container">
+            <div class="footer-main">
+                <div class="footer-col">
+                    <h2 class="footer-logo">AURA.</h2>
+                    <p class="slogan">THE MIDNIGHT FEED</p>
+                </div>
+                <div class="footer-col">
+                    <h4>EXPLORE</h4>
+                    <a href="#">THEMES</a>
+                    <a href="#">COMMUNITY</a>
+                </div>
+                <div class="footer-col">
+                    <h4>SUPPORT</h4>
+                    <a href="#">FAQS</a>
+                    <a href="#">TICKETS</a>
+                </div>
+                <div class="footer-col">
+                    <h4>LEGAL</h4>
+                    <a href="#">PRIVACY</a>
+                    <a href="#">TERMS</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-reddit-alien"></i></a>
+                </div>
+                <p class="copyright">© 2026 Aura Media. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    
+
+    <script src="/Pages/JS/red-berry.js"></script>
+
+</body>
+</html>
+
+<!-- Login / Signup Modal -->
+<div id="login-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:2000;">
+    <div style="background:var(--card-bg); border:1px solid var(--border); padding:20px; width:360px; border-radius:10px; color:var(--cream);">
+        <h3 style="margin-top:0;">Welcome — Sign in</h3>
+        <p style="color:#bbb; margin-bottom:12px;">Choose a sign-in method or create a local account.</p>
+
+        <button id="google-signin" style="width:100%; padding:10px; margin-bottom:8px; border-radius:8px; background:#4285F4; color:white; border:none; cursor:pointer;"><i class="fa-brands fa-google"></i> Continue with Google</button>
+
+        <div style="text-align:center; margin:8px 0; color:#888;">— or —</div>
+
+        <input id="modal-username" placeholder="Username" style="width:100%; padding:8px; margin-bottom:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.08); background:transparent; color:var(--cream);" />
+        <input id="modal-password" type="password" placeholder="Password" style="width:100%; padding:8px; margin-bottom:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.08); background:transparent; color:var(--cream);" />
+        <div style="display:flex; gap:8px;">
+            <button id="modal-signup" class="btn-join" style="flex:1;">Sign up</button>
+            <button id="modal-signin" class="btn-join" style="flex:1; background:#333;">Sign in</button>
+        </div>
+        <div style="margin-top:8px; text-align:right;"><button id="modal-cancel" class="btn-join" style="background:#333;">Cancel</button></div>
+        <p id="modal-note" style="color:#bbb; font-size:0.85rem; margin-top:10px;">Note: Google sign-in requires a configured OAuth client ID. See README for setup instructions.</p>
+    </div>
+</div>
