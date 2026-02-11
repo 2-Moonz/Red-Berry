@@ -12,18 +12,18 @@
 </head>
 <body>
 
-    <nav>
+    <nav role="navigation" aria-label="Main navigation">
         <div class="nav-left">
-            <i id="profile-toggle" class="fa-solid fa-circle-user profile-icon-top" title="Profile"></i>
-            <a href="#" class="logo">Aura.</a>
+            <a href="/Pages/Index.html" class="logo" aria-label="Home">Aura.</a>
+            <button id="profile-toggle" class="icon-btn" title="Profile" aria-label="Profile"><i class="fa-solid fa-circle-user profile-icon-top"></i></button>
         </div>
-        
-        <input type="text" class="search-bar" placeholder="Search the midnight...">
-        
+
+        <input type="text" class="search-bar" placeholder="Search the midnight..." aria-label="Search posts">
+
         <ul class="nav-links">
-            <li><i class="fa-solid fa-fire"></i></li>
-            <li><i class="fa-solid fa-chart-line"></i></li>
-            <li id="nav-community"><i class="fa-solid fa-comment-dots" title="Communities"></i></li>
+            <li><a id="nav-fire" class="nav-link" href="/Pages/red-berry.html" title="Trending" aria-label="Trending"><i class="fa-solid fa-fire"></i><span class="sr-only">Trending</span></a></li>
+            <li><a id="nav-trending" class="nav-link" href="/Pages/chat.html" title="Activity" aria-label="Activity"><i class="fa-solid fa-chart-line"></i><span class="sr-only">Activity</span></a></li>
+            <li><a id="nav-community" class="nav-link" href="/Pages/info.html#community" title="Communities" aria-label="Communities"><i class="fa-solid fa-comment-dots"></i><span class="sr-only">Communities</span></a></li>
         </ul>
     </nav>
 
@@ -107,7 +107,7 @@
                 </div>
 
                 <button class="btn-join" id="btn-join-community">Join Community</button>
-                <button class="btn-new-post" id="open-post-btn">+ New Post</button>
+                <button class="btn-new-post" id="open-post-btn" style="display:none;">+ New Post</button>
 
                 <div class="create-post" id="create-post" style="display:none;">
                     <input id="post-title" placeholder="Title" />
@@ -136,26 +136,26 @@
                 </div>
                 <div class="footer-col">
                     <h4>EXPLORE</h4>
-                    <a href="#">THEMES</a>
-                    <a href="#">COMMUNITY</a>
+                    <a href="/Pages/info.html">THEMES</a>
+                    <a href="/Pages/info.html">COMMUNITY</a>
                 </div>
                 <div class="footer-col">
                     <h4>SUPPORT</h4>
-                    <a href="#">FAQS</a>
-                    <a href="#">TICKETS</a>
+                    <a href="/Pages/info.html">FAQS</a>
+                    <a href="/Pages/info.html">TICKETS</a>
                 </div>
                 <div class="footer-col">
                     <h4>LEGAL</h4>
-                    <a href="#">PRIVACY</a>
-                    <a href="#">TERMS</a>
+                    <a href="/Pages/info.html">PRIVACY</a>
+                    <a href="/Pages/info.html">TERMS</a>
                 </div>
             </div>
 
             <div class="footer-bottom">
                 <div class="social-icons">
-                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-x-twitter"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-reddit-alien"></i></a>
+                    <a href="/Pages/info.html" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="/Pages/info.html" class="icon"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="/Pages/info.html" class="icon"><i class="fa-brands fa-reddit-alien"></i></a>
                 </div>
                 <p class="copyright">© 2026 Aura Media. All rights reserved.</p>
             </div>

@@ -206,6 +206,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			if (current) {
 				if (loginForm) loginForm.style.display = 'none';
 				profileSummary.style.display = 'block';
+				// hide the sidebar "Log in / Create" button when logged in
+				const openLoginBtn = document.getElementById('open-login-btn'); if (openLoginBtn) openLoginBtn.style.display = 'none';
+				// ensure post button is visible for logged in users
+				const openPostBtn = document.getElementById('open-post-btn'); if (openPostBtn) openPostBtn.style.display = '';
 				profileNameEl.textContent = current.displayName || current.username;
 				profileUsernameEl.textContent = current.username;
 				// populate edit fields
@@ -216,6 +220,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			} else {
 				if (loginForm) loginForm.style.display = 'block';
 				profileSummary.style.display = 'none';
+				const openLoginBtn = document.getElementById('open-login-btn'); if (openLoginBtn) openLoginBtn.style.display = '';
+				const openPostBtn = document.getElementById('open-post-btn'); if (openPostBtn) openPostBtn.style.display = 'none';
 			}
 		})();
 	}
@@ -308,7 +314,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	searchBar?.addEventListener('input', (e) => { currentFilter = e.target.value || ''; renderPosts(); });
 
 	// Community page handlers and moderation center
-	document.getElementById('nav-community')?.addEventListener('click', async () => {
+	document.getElementById('nav-community')?.addEventListener('click', async (e) => {
+		// prevent default navigation so we can show the community panel in-place
+		if (e && e.preventDefault) e.preventDefault();
 		const page = document.getElementById('community-page');
 		page.style.display = 'block';
 		try {
@@ -374,7 +382,37 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	// initial render: try server, then render
-	(async function(){ await initPosts(); renderAuth(); renderPosts(); })();
+	// small helper: top-right button popovers
+	function setupTopRightButtons(){
+		function closePopovers(){ document.querySelectorAll('.top-panel-popover').forEach(p=>p.remove()); }
+		function createPopover(html, anchor){ closePopovers(); const pop = document.createElement('div'); pop.className='top-panel-popover'; pop.style.position='absolute'; pop.style.background='var(--card-bg)'; pop.style.color='var(--cream)'; pop.style.border='1px solid var(--border)'; pop.style.padding='12px'; pop.style.borderRadius='8px'; pop.style.minWidth='200px'; pop.style.boxShadow='0 6px 18px rgba(0,0,0,0.5)'; pop.innerHTML = html; document.body.appendChild(pop);
+			const r = anchor.getBoundingClientRect(); pop.style.top = (r.bottom + 8 + window.scrollY) + 'px'; pop.style.left = Math.max(8, r.left + window.scrollX - 80) + 'px';
+			// close when clicking outside
+			setTimeout(()=>{ window.addEventListener('click', function ondoc(e){ if (!pop.contains(e.target) && e.target !== anchor){ pop.remove(); window.removeEventListener('click', ondoc); } }, { once:false }); }, 50);
+			return pop;
+		}
+
+		const fireBtn = document.getElementById('nav-fire');
+		const trendingBtn = document.getElementById('nav-trending');
+
+		// highlight active nav link based on current path
+		function highlightActiveNav(){
+			const links = document.querySelectorAll('.nav-links a.nav-link');
+			const cur = window.location.pathname.replace(/\\/g, '/');
+			links.forEach(a => {
+				try{
+					const hrefPath = new URL(a.href, window.location.origin).pathname;
+					if (hrefPath === cur) a.classList.add('active'); else a.classList.remove('active');
+				}catch(e){ }
+			});
+		}
+		highlightActiveNav();
+
+		fireBtn?.addEventListener('click', (e)=>{ if (e && e.preventDefault) e.preventDefault(); e.stopPropagation(); const html = '<strong>Trending</strong><div style="margin-top:8px;">Top posts and discoveries live here.</div><ul style="margin-top:8px; padding-left:16px;"><li>Feature 1</li><li>Feature 2</li></ul>'; createPopover(html, fireBtn); });
+		trendingBtn?.addEventListener('click', (e)=>{ if (e && e.preventDefault) e.preventDefault(); e.stopPropagation(); const html = '<strong>Activity</strong><div style="margin-top:8px;">Your recent activity and notifications.</div><div style="margin-top:8px;"><em>(placeholder)</em></div>'; createPopover(html, trendingBtn); });
+	}
+
+	(async function(){ await initPosts(); renderAuth(); renderPosts(); setupTopRightButtons(); })();
 });
 
 /* Small CSS injection for active/hover states (keeps edits local) */
@@ -387,6 +425,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		.share-btn:hover { color: var(--orange); }
 		#login-form input, #profile-edit input, #profile-edit textarea { width:100%; margin-bottom:8px; }
 		#profile-summary { margin-top:8px; }
+		.top-panel-popover { z-index: 3000; }
+		.nav-links a.nav-link { color: inherit; text-decoration: none; display:inline-flex; align-items:center; gap:6px; padding:6px; }
+		.nav-links a.nav-link.active { color: var(--orange); border-bottom:2px solid var(--orange); }
+		.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 	`;
 	const s = document.createElement('style'); s.textContent = css;
 	document.head.appendChild(s);
@@ -458,19 +500,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// (old local modal handler removed — using Sign up / Sign in handlers above)
 
-	// GOOGLE OAUTH placeholder button
+	// GOOGLE OAUTH using Google Identity Services (ID token flow)
+	// Using the provided client ID from the user
+	const GOOGLE_CLIENT_ID = '857588084937-l64dtqgbqis8nml1gcrqcbsmbdo8en68.apps.googleusercontent.com';
 	googleBtn?.addEventListener('click', () => {
-		// If you have a Google OAuth client id, you can implement the client-side Google Identity flows here.
-		// For now show a helpful message and keep the modal open for local signup as fallback.
-		const clientId = null; // <-- replace with your Google OAuth Client ID to enable real flow
-		if (!clientId) {
-			alert('Google Sign-in is not configured in this demo. Use "Sign up / Login" to create a local account.');
-			return;
+		// load the Google Identity Services script if not already loaded
+		function initGoogle() {
+			if (!window.google || !window.google.accounts || !window.google.accounts.id) {
+				console.warn('Google Identity script not loaded');
+				return;
+			}
+			window.google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential });
+			// prompt the One Tap / sign-in UI
+			window.google.accounts.id.prompt();
 		}
-		// If clientId provided, initialize Google Identity Services here.
-		// Example (requires loading Google Identity script and a configured client id):
-		// window.google.accounts.id.initialize({ client_id: clientId, callback: handleGoogleCredential });
-		// window.google.accounts.id.prompt();
+
+		function handleGoogleCredential(resp) {
+			// resp.credential is an ID token (JWT). Send to server for verification and session creation.
+			if (!resp || !resp.credential) { alert('Google sign-in failed'); return; }
+			fetch('/auth/google/token', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id_token: resp.credential }) })
+				.then(r => r.json())
+				.then(j => {
+					if (j && j.username) {
+						// refresh client UI
+						closeModal(); initPosts().then(()=>{ renderAuth(); renderPosts(); });
+					} else {
+						alert('Google sign-in failed');
+					}
+				}).catch(e => { console.warn(e); alert('Google sign-in failed'); });
+		}
+
+		if (window.google && window.google.accounts && window.google.accounts.id) initGoogle();
+		else {
+			const s = document.createElement('script');
+			s.src = 'https://accounts.google.com/gsi/client';
+			s.async = true; s.defer = true;
+			s.onload = initGoogle;
+			document.head.appendChild(s);
+		}
 	});
 });
 

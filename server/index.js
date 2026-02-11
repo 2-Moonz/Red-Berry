@@ -81,6 +81,38 @@ app.post('/auth/login', (req, res) => {
   res.json({ username, displayName: user.displayName });
 });
 
+// Verify Google ID token sent from client and sign the user in via session
+app.post('/auth/google/token', (req, res) => {
+  const { id_token } = req.body;
+  if (!id_token) return res.status(400).json({ error: 'id_token required' });
+  // verify token with Google's tokeninfo endpoint
+  const https = require('https');
+  const url = 'https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(id_token);
+  https.get(url, (gRes) => {
+    let data = '';
+    gRes.on('data', chunk => data += chunk);
+    gRes.on('end', () => {
+      try {
+        const info = JSON.parse(data);
+        // info contains: aud, sub, email, name, picture, etc.
+        // optionally verify audience
+        if (GOOGLE_CLIENT_ID && info.aud && info.aud !== GOOGLE_CLIENT_ID) {
+          return res.status(400).json({ error: 'invalid_audience' });
+        }
+        const username = 'g-' + info.sub;
+        const dataFile = readData();
+        dataFile.users[username] = dataFile.users[username] || { username, displayName: info.name || username, bio:'', votes:{}, joinedCommunity:false, passwordHash: null };
+        dataFile.users[username].lastActive = Date.now();
+        writeData(dataFile);
+        req.session.username = username;
+        return res.json({ username, displayName: dataFile.users[username].displayName });
+      } catch (e) {
+        return res.status(500).json({ error: 'token_verification_failed' });
+      }
+    });
+  }).on('error', () => res.status(500).json({ error: 'token_verification_failed' }));
+});
+
 app.post('/auth/logout', (req, res) => {
   req.session.destroy(() => res.json({ ok:true }));
 });
