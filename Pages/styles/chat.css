@@ -601,3 +601,105 @@ font-size: 12px;
   textarea::-webkit-scrollbar {
     display: none;
   }
+  /* ... (previous root and wrapper styles remain the same) ... */
+
+/* 1. The Logo and its transition */
+.logo {
+    display: flex;
+    align-items: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 24px; /* Give it a fixed width so it doesn't 'jump' when disappearing */
+    opacity: 1;
+  }
+  
+  /* This is the class your JS will toggle */
+  .is-typing .logo {
+    opacity: 0;
+    width: 0;
+    margin-right: -12px; /* Pulls the text over to fill the gap */
+    visibility: hidden;
+    transform: scale(0.5);
+  }
+  
+  /* 2. Icon Animation */
+  .icon-only-btn svg {
+    color: white;
+    transform: rotate(-45deg);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  /* Hover: subtle pulse and glow */
+  .icon-only-btn:hover svg {
+    transform: rotate(-45deg) scale(1.2);
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+  }
+  
+  /* Active (Click): The 'Launch' effect */
+  .icon-only-btn:active svg {
+    transform: rotate(-45deg) translate(5px, -5px) scale(0.9);
+    opacity: 0.5;
+  }
+  
+  /* 3. Textarea adjustment */
+  textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    outline: none;
+    padding: 10px 0;
+    transition: all 0.3s ease;
+  } 
+  /* --- Social Icons Hover Effect --- */
+.social-icons i {
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: var(--cream);
+    opacity: 0.6; /* Muted by default */
+}
+
+.social-icons i:hover {
+    opacity: 1;
+    transform: scale(1.3) translateY(-5px); /* Grows and moves up slightly */
+    color: #fff;
+    /* The Midnight Glow effect */
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.7)); 
+}
+
+/* Optional: Different glow colors for different icons */
+.social-icons i.fa-instagram:hover {
+    filter: drop-shadow(0 0 12px #f09433);
+}
+
+.social-icons i.fa-x-twitter:hover {
+    filter: drop-shadow(0 0 12px #ffffff);
+}
+
+.social-icons i.fa-dribbble:hover {
+    filter: drop-shadow(0 0 12px #ea4c89);
+}
+/* Smoothly hide the title and social icons */
+#heroSection {
+    transition: all 0.6s ease;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* When typing class is active */
+.is-typing #heroSection {
+    opacity: 0;
+    transform: translateY(-30px);
+    pointer-events: none; /* User can't click hidden icons */
+}
+
+/* Social Icon Hover Glow */
+.social-icons i {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.social-icons i:hover {
+    color: white;
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+}

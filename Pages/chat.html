@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/Pages/styles/chat.css">
 </head>
-<body>
+<body id="mainBody">
 
     <nav>
         <div class="logo">Aura.</div>
@@ -21,7 +21,7 @@
     </nav>
 
     <main class="page-wrapper">
-        <div class="hero-text">
+        <div class="hero-text" id="heroSection">
             <h1>The Midnight Glow</h1>
             <div class="social-icons">
                 <i class="fa-brands fa-instagram"></i>
@@ -36,9 +36,10 @@
             <div class="shining-circle"></div>
         </div>
     </main>
+
     <div class="input-dock-wrapper">
         <div class="outer-box">
-          <div class="inner-circle-bar">
+          <div class="inner-circle-bar" id="inputContainer">
             <textarea id="userInput" placeholder="Ask AI..." rows="1"></textarea>
             <button id="sendBtn" class="icon-only-btn">
               <svg viewBox="0 0 24 24" width="20" height="20">
@@ -47,7 +48,7 @@
             </button>
           </div>
         </div>
-      </div>
-    
+    </div>
+
 </body>
 </html>
