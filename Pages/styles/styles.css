@@ -2,7 +2,7 @@
             --cream: #fefae0;
             --deep-red: #d00000;
             --purple: #6a0dad;
-            --orange: #ff6f00;
+            --orange: #F63049;
             --dark-bg: #0a0a0a;
         }
 
@@ -189,12 +189,12 @@
 
         .card:hover {
             transform: translateY(-10px);
-            border-color: var(--orange);
+            border-color: var(--cream);
         }
 
         .card i {
             font-size: 2.5rem;
-            color: var(--orange);
+            color: var(--cream);
             margin-bottom: 1.5rem;
         }
 
@@ -209,3 +209,215 @@
             line-height: 1.6;
             opacity: 0.8;
         }
+        .black-footer {
+            background-color: #0d0d0d;
+            color: #ffffff; /* The muted blue text color */
+            padding: 60px 0 30px 0;
+            font-family: 'Arial', sans-serif;
+            font-size: 13px;
+          }
+          
+         /* --- Optimized Black Footer --- */
+.black-footer {
+    background-color: #0d0d0d;
+    padding: 60px 0 30px 0;
+    font-family: 'Arial', sans-serif; /* Keep headers clean; logo uses global font */
+    font-size: 13px;
+    position: relative;
+    z-index: 20; /* Ensures it sits above your background blobs */
+}
+
+.footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-main {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+/* Logo & Slogan - Forcing Pure White */
+.footer-logo {
+    color: #ffffff !important;
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: 2px;
+    font-family: 'Dancing Script', cursive; /* Matches your site branding */
+}
+
+.slogan {
+    color: #ffffff;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-top: 5px;
+    opacity: 0.8;
+}
+
+/* Links & Headers - Clean White */
+.footer-col h4 {
+    color: #ffffff;
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.footer-col a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-bottom: 8px;
+    opacity: 0.8; /* Slightly softer white for links */
+    transition: opacity 0.3s, color 0.3s;
+}
+
+.footer-col a:hover {
+    opacity: 1;
+    color: var(--orange); /* Uses your root variable for a nice pop of color */
+}
+
+/* Divider Line */
+.footer-divider {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2); /* Subtle light line */
+    margin-bottom: 30px;
+}
+
+/* Bottom Section */
+.footer-bottom {
+    text-align: center;
+    color: #ffffff;
+}
+
+.social-icons {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border: 1px solid #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.icon:hover {
+    background: #ffffff;
+    color: #000000;
+    transform: scale(1.1);
+}
+
+.copyright {
+    font-size: 12px;
+    opacity: 0.7;
+}
+.black-footer {
+    background-color: #0d0d0d;
+    color: #789db7; /* The muted blue text color */
+    padding: 60px 0 30px 0;
+    font-family: 'Arial', sans-serif;
+    font-size: 13px;
+  }
+  
+  .footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .footer-main {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .footer-logo {
+    color: white;
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: 2px;
+  }
+  
+  .slogan {
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-top: 5px;
+  }
+  
+  .footer-col h4 {
+    color: #789db7;
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .footer-col a {
+    color: #789db7;
+    text-decoration: none;
+    margin-bottom: 8px;
+    transition: color 0.3s;
+  }
+  
+  .footer-col a:hover {
+    color: white;
+  }
+  
+  .footer-divider {
+    border: 0;
+    border-top: 1px solid #333;
+    margin-bottom: 30px;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+  }
+  
+  .social-icons {
+    margin-bottom: 15px;
+  }
+  
+  .icon {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #789db7;
+    border-radius: 50%;
+    line-height: 30px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .icon:hover {
+    background: #789db7;
+    color: black;
+  }
+  
+  .copyright {
+    font-size: 12px;
+  }
