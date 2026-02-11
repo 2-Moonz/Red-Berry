@@ -1,0 +1,211 @@
+    :root {
+            --cream: #fefae0;
+            --deep-red: #d00000;
+            --purple: #6a0dad;
+            --orange: #ff6f00;
+            --dark-bg: #0a0a0a;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            background-color: #000;
+            color: var(--cream);
+            font-family: 'Dancing Script', cursive;
+            overflow-x: hidden; /* Changed from hidden to allow vertical scroll */
+        }
+
+        /* --- Nav Bar --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 1.4rem;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.7;
+        }
+
+        /* --- Main Content (Page 1) --- */
+        .page-wrapper {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-text {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .hero-text h1 {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-icons {
+            font-size: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        /* --- Blob Container --- */
+        .blob-container {
+            position: absolute;
+            bottom: -400px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px; 
+            overflow: visible; 
+            z-index: 1;
+        }
+
+        .shining-circle {
+            width: 800px;
+            height: 800px; 
+            background: conic-gradient(
+                from 180deg at 50% 50%,
+                var(--purple) 0deg,
+                var(--deep-red) 90deg,
+                var(--deep-red) 270deg,
+                var(--orange) 360deg
+            );
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.8;
+            animation: spin 10s linear infinite;
+            box-shadow: 
+                inset 0 0 100px rgba(255, 255, 255, 0.4),
+                0 0 60px var(--deep-red);
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .glow-overlay {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 200px;
+            background: white;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 5;
+        }
+
+/* --- Updated Blob Container to stay visible during scroll --- */
+        .blob-container {
+            position: fixed; /* Changed to fixed so it stays in the background as you scroll */
+            bottom: -400px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px; 
+            overflow: visible; 
+            z-index: 1;
+        }
+
+        /* --- Updated Page 2 Content --- */
+        .content-section {
+            min-height: 100vh;
+            /* background-color: var(--dark-bg); <-- Removed solid color */
+            background-color: rgba(10, 10, 10, 0.4); /* Subtle dark tint for readability */
+            backdrop-filter: blur(15px); /* This creates the blurry glass effect */
+            -webkit-backdrop-filter: blur(15px); /* Safari support */
+            padding: 8rem 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Optional: slight separator */
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid var(--deep-red);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, border-color 0.3s;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--orange);
+        }
+
+        .card i {
+            font-size: 2.5rem;
+            color: var(--orange);
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            font-family: sans-serif; /* Cleaner for body text */
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.8;
+        }
