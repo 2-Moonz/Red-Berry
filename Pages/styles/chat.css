@@ -1,226 +1,380 @@
-/* 1. ROOT VARIABLES & GLOBAL SETUP */
-:root {
-    --cream: #fefae0;
-    --deep-red: #d00000;
-    --purple: #6a0dad;
-    --orange: #F63049;
-    --dark-bg: #0a0a0a;
-    /* Glass Effect Variables */
-    --outer-bg: rgba(255, 255, 255, 0.05); 
-    --circle-bg: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.15);
+* { box-sizing: border-box; }
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color: #ffffff;
+  /* Add a smooth scrolling experience */
+  scroll-behavior: smooth;
 }
 
-* {
-    box-sizing: border-box;
-    scroll-behavior: smooth;
+.background {
+  position: fixed;
+  inset: 0;
+  background: url("/Pages/styles/images/background.jpg") no-repeat center center;
+  background-size: cover;
+  z-index: -1; /* Push the background layer further back */
 }
 
-body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    background-color: #000;
-    color: var(--cream);
-    font-family: 'Dancing Script', cursive;
-    overflow-x: hidden;
+/* New: Style for the top-level container for all content */
+.container {
+  position: relative;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column; /* Stack navbar and main wrap vertically */
+  align-items: center;
+  padding: 20px 4vw; /* Add padding to the top for the navbar to breathe */
 }
 
-/* 2. NAVIGATION & HERO SECTION */
-/* 2. NAVIGATION UPDATES */
-nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    padding: 1.5rem 4rem;
+/* New: Navbar Card Styling */
+.navbar-card {
+  width: min(1100px, 92vw);
+  height: 60px; /* Fixed height for the nav bar */
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px; /* Space between navbar and main card */
+  padding: 0 15px;
+  /* Using the same glass-morphism style as the main card */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35),
+             inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  z-index: 100; /* Ensure navbar is on top */
+}
+
+/* New: Logo Styling */
+.logo-container {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.4em;
+  font-weight: 600;
+  gap: 8px;
+}
+
+.logo-container img {
+  height: 30px; /* Size of the favicon/logo image */
+  width: 30px;
+  border-radius: 50%;
+}
+
+/* New: Nav Button Group Styling */
+.nav-buttons {
+  display: flex;
+  gap: 15px;
+  margin-right: auto; /* Push the buttons to the left of the menu and away from logo */
+  margin-left: 25px; /* Space from the logo */
+}
+
+/* New: Nav Button Base Style */
+.nav-button {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 1em;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  text-decoration: none; /* Make buttons also work as links */
+  display: flex;
+  align-items: center;
+}
+
+.nav-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #fff;
+}
+
+.wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.card {
+  width: min(1100px, 92vw);
+  height: min(80vh, 800px);
+  border-radius: 28px;
+  display: flex;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35),
+              inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.chat-panel {
+  flex: 0 0 35%;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255,255,255,0.2);
+  padding: 0;
+}
+
+/* --- NAVIGATION STYLES (Chat Header Dropdown) --- */
+.chat-header {
+  /* Hidden the existing header since the new navbar replaces its function/title */
+  display: none; 
+}
+
+.menu-container {
+  position: relative; 
+}
+
+/* Menu toggle is used for the 3-dot menu in the navbar */
+.menu-toggle {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 100%; 
+  right: 0; 
+  margin-top: 8px; 
+  width: 150px;
+  background: rgba(43, 11, 83, 0.8);
+  backdrop-filter: blur(20px); 
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  display: none; 
+  flex-direction: column;
+  padding: 8px 0;
+  z-index: 50; 
+}
+
+.dropdown-content.show {
+  display: flex;
+}
+
+.dropdown-content a {
+  color: #fff;
+  padding: 10px 16px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dropdown-content a i {
+    font-size: 16px;
+    width: 16px; 
+}
+
+.dropdown-content a:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- MESSAGE STYLES --- */
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px; 
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* Add some space at the top since chat-header is hidden */
+  padding-top: 25px; 
+}
+
+.message {
+  padding: 10px 14px;
+  border-radius: 12px;
+  max-width: 80%;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.message.sent {
+  align-self: flex-end;
+  background: #2b0b53; 
+  color: #ffffff;
+}
+
+.message.received {
+  align-self: flex-start;
+  background: rgba(255,255,255,0.3); 
+  color: #ffffff;
+}
+
+/* Typing Indicator (from first file) */
+.typing-indicator {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    z-index: 100;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+    gap: 4px;
 }
 
-.nav-links {
-    display: flex;       /* This puts the list items in a row */
-    list-style: none;    /* Removes the bullet points */
-    margin: 0;
-    padding: 0;
-    gap: 2rem;           /* Space between the links */
+.typing-indicator span {
+    display: block;
+    width: 8px;
+    height: 8px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    opacity: 0.7;
+    animation: bounce 1.4s infinite ease-in-out both;
 }
 
-.utsende a {
-    text-decoration: none; /* Removes the underline */
-    color: var(--cream);
-    font-family: 'SN Pro', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    opacity: 0.8;
-    display: flex;
-    align-items: center;
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
 }
 
-/* Hover effect to match your glowing theme */
-.utsende a:hover {
-    opacity: 1;
-    color: #fff;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    transform: translateY(-2px);
+.chat-input {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 16px; 
+  border-top: 1px solid rgba(255,255,255,0.15);
 }
 
-/* Specific styling for the house icon */
-.utsende i {
-    font-size: 1.3rem;
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
 }
-.hero-text {
-    text-align: center;
+
+.chat-input button {
+  border: none;
+  background: #ffffff;
+  color: #2b0b53;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+/* --- CONTENT PANEL & TOOL STYLES --- */
+.content-panel {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start; 
+  justify-content: flex-start; 
+  color: #f2ecff;
+  font-size: 18px;
+  position: relative; 
+}
+
+/* Tool Container Positioning */
+.tool-container {
+    position: absolute;
+    top: 20px; /* Aligned with top padding */
+    right: 20px; /* Aligned with right padding */
     z-index: 10;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 1;
-    transform: translateY(0);
 }
 
-/* DISAPPEAR LOGIC: When JS adds 'is-typing' to body */
-.is-typing .hero-text {
-    opacity: 0;
-    transform: translateY(-30px);
-    pointer-events: none;
-    visibility: hidden;
-}
-
-.hero-text h1 {
-    font-size: 5rem;
-    margin-bottom: 1rem;
-}
-
-/* 3. SOCIAL ICONS & HOVER EFFECTS */
-.social-icons {
-    font-size: 1.5rem;
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-}
-
-.social-icons i {
-    cursor: pointer;
-    color: var(--cream);
-    opacity: 0.6;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.social-icons i:hover {
-    opacity: 1;
-    transform: scale(1.3) translateY(-5px);
-    color: #fff;
-    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.7)); 
-}
-
-/* Specific Glow Colors */
-.social-icons i.fa-instagram:hover { filter: drop-shadow(0 0 12px #f09433); }
-.social-icons i.fa-x-twitter:hover { filter: drop-shadow(0 0 12px #ffffff); }
-.social-icons i.fa-dribbble:hover { filter: drop-shadow(0 0 12px #ea4c89); }
-
-/* 4. THE INPUT DOCK (Ultra-Glass Style) */
-.input-dock-wrapper {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 95%;
-    max-width: 650px;
-    z-index: 1000;
-}
-
-.outer-box {
-    padding: 5px 10px;
-    background: var(--outer-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 14px;
-}
-
-.inner-circle-bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 4px 15px;
-    background: var(--circle-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 50px;
-}
-
-textarea {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 15px;
-    font-family: sans-serif; /* Cleaner for typing */
-    resize: none;
-    outline: none;
-    padding: 10px 0;
-    height: 40px;
-    line-height: 20px;
-    transition: all 0.3s ease;
-}
-
-textarea::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-/* THE SEND BUTTON & ANIMATION */
-.icon-only-btn {
+/* Styles for the Tools Button */
+.tools-toggle {
     background: none;
     border: none;
-    color: white;
+    color: #fff;
+    font-size: 20px;
     cursor: pointer;
-    display: flex;
-    padding: 0;
-    transition: all 0.3s ease;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
 }
 
-.icon-only-btn svg {
-    transform: rotate(-45deg); /* Your 45-degree tilt */
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.tools-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
 }
 
-.icon-only-btn:hover svg {
-    transform: rotate(-45deg) scale(1.2);
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+/* Styles for the Tools Dropdown Menu */
+.tools-dropdown-content {
+  position: absolute;
+  top: 100%; 
+  right: 0; 
+  margin-top: 8px; 
+  width: 150px;
+  background: rgba(43, 11, 83, 0.8);
+  backdrop-filter: blur(20px); 
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  display: none; 
+  flex-direction: column;
+  padding: 8px 0;
+  z-index: 50; 
 }
 
-/* 5. BACKGROUND ELEMENTS */
-.blob-container {
-    position: fixed;
-    bottom: -400px; 
-    left: 50%;
-    transform: translateX(-50%);
-    width: 800px;
-    height: 800px; 
-    z-index: 1;
+.tools-dropdown-content.show {
+  display: flex;
 }
 
-.shining-circle {
+.tools-dropdown-content a {
+  color: #fff;
+  padding: 10px 16px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tools-dropdown-content a i {
+    font-size: 16px;
+    width: 16px; 
+}
+
+.tools-dropdown-content a:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Style for the editable content area */
+#editableContent {
     width: 100%;
-    height: 100%;
-    background: conic-gradient(from 180deg at 50% 50%, var(--purple) 0deg, var(--deep-red) 90deg, var(--deep-red) 270deg, var(--orange) 360deg);
-    border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.8;
-    animation: spin 10s linear infinite;
+    min-height: 100px;
+    padding: 10px;
+    border-radius: 8px;
+    line-height: 1.6;
+    transition: all 0.2s ease;
+    border: 1px solid transparent; 
+    box-shadow: none;
+    /* Adjusted margin-top so content isn't under the absolute button */
+    margin-top: 40px; 
 }
 
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-.logo{
-    
-        font-size: 100px;
-      
-      
-      /* Using Rem (Scales with browser settings - Best for accessibility) */
-  
-        font-size: 2rem;
-}
+/* Style when editing is active */
+#editableContent[contenteditable="true"] {
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}s

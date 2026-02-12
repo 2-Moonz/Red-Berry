@@ -7,6 +7,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
+const axios = require('axios');
 
 const DATA_FILE = path.join(__dirname, 'data.json');
 function readData(){
@@ -186,6 +187,60 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
     res.redirect('/Pages/red-berry.html');
   });
 }
+
+// AI keys and model (comma-separated keys in GEMINI_KEYS)
+const GEMINI_KEYS_RAW = process.env.GEMINI_KEYS || '';
+const GEMINI_KEYS = GEMINI_KEYS_RAW.split(',').map(s => s.trim()).filter(Boolean);
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'text-bison-001';
+
+// POST /api/ai { prompt: string, model?: string }
+app.post('/api/ai', async (req, res) => {
+  const userPrompt = String((req.body && req.body.prompt) || '').trim();
+  if (!userPrompt) return res.status(400).json({ error: 'prompt required' });
+
+  if (GEMINI_KEYS.length === 0) return res.status(500).json({ error: 'no api keys configured' });
+
+  // System instruction: act as a friendly student tutor and produce quiz code samples when appropriate
+  const systemInstruction = `You are Aura Tutor, a helpful AI tutor for students. Always respond as a supportive teacher: provide clear explanations, step-by-step solutions, and concise summaries. When the user requests practice, quizzes, or exam preparation, generate a short practice quiz (3-8 questions) with correct answers. Additionally, include a small runnable sample (HTML + JavaScript) that implements the quiz UI so the student can test themselves. Label code sections clearly and provide the correct answers in a separate JSON block at the end. Do not hallucinate facts; when uncertain, say you are unsure and suggest how to find the correct answer.`;
+
+  const fullPrompt = systemInstruction + "\n\nUser: " + userPrompt;
+
+  let lastErr = null;
+  for (const key of GEMINI_KEYS) {
+    try {
+      const modelToUse = (req.body && req.body.model) ? String(req.body.model) : GEMINI_MODEL;
+      const url = `https://generativelanguage.googleapis.com/v1beta2/models/${encodeURIComponent(modelToUse)}:generateText?key=${encodeURIComponent(key)}`;
+      const body = {
+        prompt: { text: fullPrompt },
+        temperature: 0.2,
+        maxOutputTokens: 512
+      };
+      const apiRes = await axios.post(url, body, { timeout: 20000 });
+      if (apiRes && apiRes.data) {
+        let text = '';
+        if (apiRes.data.candidates && apiRes.data.candidates.length) {
+          text = apiRes.data.candidates.map(c => c.output || c).join('\n');
+        } else if (apiRes.data.output && apiRes.data.output[0] && apiRes.data.output[0].content) {
+          text = apiRes.data.output.map(o => o.content).join('\n');
+        } else if (typeof apiRes.data.result === 'string') {
+          text = apiRes.data.result;
+        } else {
+          text = JSON.stringify(apiRes.data);
+        }
+        return res.json({ text });
+      }
+    } catch (err) {
+      lastErr = err;
+      const status = err && err.response && err.response.status;
+      console.warn('AI key failed', status || err.message);
+      // for common recoverable errors try next key
+      continue;
+    }
+  }
+
+  console.error('All AI keys failed', lastErr && lastErr.message);
+  return res.status(502).json({ error: 'ai_service_unavailable', detail: (lastErr && lastErr.message) || 'all keys failed' });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, ()=> console.log('Server running on', PORT));

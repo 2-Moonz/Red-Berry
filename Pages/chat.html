@@ -1,63 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Mode Narrative</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/Pages/styles/chat.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BlueBerry-Chat</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <link rel="icon" type="image/x-icon" href="/AI-plans/Project/assets/css/images/favicon.ico">
+  <link rel="stylesheet" href="/Pages/styles/chat.css" />
 </head>
-<body id="mainBody">
+<body>
+  <div class="background" aria-hidden="true"></div>
 
-    <nav>
-        <div class="logo">Red berry.</div>
-        <ul class="nav-links">
-            <li class="utsende"><a href="#"><i class="fa-solid fa-house"></i></a></li>
-            <li class="utsende"><a href="#work">Work</a></li>
-            <li class="utsende"><a href="#">Contact</a></li>
-        </ul>
-    </nav>
-
-    <main class="page-wrapper">
-        <div class="hero-text" id="heroSection">
-            <h1>The Midnight Glow</h1>
-            <div class="social-icons">
-                <i class="fa-brands fa-instagram"></i>
-                <i class="fa-brands fa-x-twitter"></i>
-                <i class="fa-brands fa-dribbble"></i>
-            </div>
-        </div>
-
-        <div class="glow-overlay"></div>
-        
-        <div class="blob-container">
-            <div class="shining-circle"></div>
-        </div>
+  <div class="container">
     
-        <div class="chat-wrapper" aria-live="polite">
-            <div class="chat-container" role="region" aria-label="Chat window">
+    <nav class="navbar-card">
+      <a href="#" class="logo-container">
+        <img src="/Pages/styles/images/favicon.ico" alt="BlueBerry Logo">
+        <span>BlueBerry</span>
+      </a>
 
+      <div class="nav-buttons">
+        <a href="#chat" class="nav-button">Chat</a>
+        <a href="#content" class="nav-button">Content</a>
+        <a href="#" class="nav-button">Docs</a>
+      </div>
 
-                </div>
-            </div>
+      <div class="menu-container">
+        <button class="menu-toggle" onclick="toggleDropdown()">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+        
+        <div id="dropdownMenu" class="dropdown-content">
+          <a href="#"><i class="fas fa-home"></i> Home</a>
+          <a href="#"><i class="fas fa-cog"></i> Settings</a>
+          <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
-    </main>
-
-    <div class="input-dock-wrapper">
-        <div class="outer-box">
-          <div class="inner-circle-bar" id="inputContainer">
-            <textarea id="userInput" placeholder="Ask AI..." rows="1"></textarea>
-            <button id="sendBtn" class="icon-only-btn">
-              <svg viewBox="0 0 24 24" width="20" height="20">
-                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"></path>
-              </svg>
-            </button>
+      </div>
+    </nav>
+    
+    <main class="wrap">
+      <section class="card">
+        <div class="chat-panel" id="chat"> 
+          <div class="messages">
+            <div class="message received">Hello! How can I help?</div>
+            
+          </div>
+          
+          <div class="message received" id="typing-indicator" style="display:none;">
+             <div class="typing-indicator">
+              <span></span>
+              <span></span>
+              <span></span>
+             </div>
+          </div>
+          
+          <div class="chat-input">
+            <input type="text" placeholder="Type a message..." />
+            <button onclick="sendMessage()">Send</button>
           </div>
         </div>
-    </div>
-
-    <script src="/Pages/JS/chat.js" defer></script>
+        
+        <div class="content-panel" id="content"> 
+          <div class="tool-container">
+            <button class="tools-toggle" onclick="toggleToolsDropdown()">
+              <i class="fas fa-tools"></i>
+            </button>
+            
+            <div id="toolsDropdownMenu" class="tools-dropdown-content">
+              <a href="#" onclick="toggleEdit(); return false;"><i class="fas fa-pencil-alt"></i> Edit Content</a>
+              <a href="#"><i class="fas fa-share-alt"></i> Share Result</a>
+              <a href="#"><i class="fas fa-file-download"></i> Export Text</a>
+            </div>
+          </div>
+          
+          <div id="editableContent" contenteditable="false">
+            <p>Responses or other content will appear here.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  
+  <script src="/geminiPrompt.json"></script> 
+  <script src="/Pages/JS/chat.js"></script>
 </body>
 </html>
