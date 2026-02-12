@@ -1,0 +1,6 @@
+/.env
+/server/.env
+/server/node_modules
+/node_modules
+# local API keys (do not commit)
+/server/keys.txt

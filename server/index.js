@@ -189,3 +189,71 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, ()=> console.log('Server running on', PORT));
+
+// --- AI proxy endpoint (Gemini / Generative Language API) ---
+// POST /api/ai { prompt: string }
+// Uses GEMINI_KEYS env var (comma-separated). Tries keys in order until one succeeds.
+const axios = require('axios');
+const GEMINI_KEYS_RAW = process.env.GEMINI_KEYS || '';
+const GEMINI_KEYS = GEMINI_KEYS_RAW.split(',').map(s => s.trim()).filter(Boolean);
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'text-bison-001';
+
+app.post('/api/ai', async (req, res) => {
+  const prompt = String((req.body && req.body.prompt) || '').trim();
+  if (!prompt) return res.status(400).json({ error: 'prompt required' });
+
+  if (GEMINI_KEYS.length === 0) {
+    return res.status(500).json({ error: 'no api keys configured on server (set GEMINI_KEYS)' });
+  }
+
+  // Try keys in order
+  let lastErr = null;
+  for (const key of GEMINI_KEYS) {
+    try {
+      // allow client to request a model; fallback to server default
+      const modelToUse = (req.body && req.body.model) ? String(req.body.model) : GEMINI_MODEL;
+      // Use the Generative Language REST endpoint. This example uses API key auth via ?key=.
+      const url = `https://generativelanguage.googleapis.com/v1beta2/models/${encodeURIComponent(modelToUse)}:generateText?key=${encodeURIComponent(key)}`;
+      const body = {
+        prompt: { text: prompt },
+        temperature: 0.2,
+        maxOutputTokens: 512
+      };
+      const apiRes = await axios.post(url, body, { timeout: 20000 });
+      if (apiRes && apiRes.data) {
+        // Attempt to find the text in response structure (best-effort)
+        let text = '';
+        if (apiRes.data.candidates && apiRes.data.candidates.length) {
+          text = apiRes.data.candidates.map(c => c.output || c).join('\n');
+        } else if (apiRes.data.output && apiRes.data.output[0] && apiRes.data.output[0].content) {
+          // some shapes include output array
+          text = apiRes.data.output.map(o => o.content).join('\n');
+        } else if (typeof apiRes.data.result === 'string') {
+          text = apiRes.data.result;
+        } else {
+          // fallback: stringify
+          text = JSON.stringify(apiRes.data);
+        }
+        return res.json({ text });
+      }
+    } catch (err) {
+      lastErr = err;
+      // on 4xx/5xx try next key for recoverable errors like rate limit
+      const status = err && err.response && err.response.status;
+      console.warn('AI key failed', status || err.message);
+      if (status === 401 || status === 403) {
+        // invalid/unauthorized - try next
+        continue;
+      }
+      if (status === 429) {
+        // rate limit - try next key
+        continue;
+      }
+      // for network errors try next key as well
+      continue;
+    }
+  }
+
+  console.error('All AI keys failed', lastErr && lastErr.message);
+  return res.status(502).json({ error: 'ai_service_unavailable', detail: (lastErr && lastErr.message) || 'all keys failed' });
+});

@@ -36,10 +36,26 @@
             <div class="shining-circle"></div>
         </div>
     
+
         <div class="chat-wrapper" aria-live="polite">
             <div class="chat-container" role="region" aria-label="Chat window">
-
-
+                <div class="chat-header" role="toolbar" aria-label="Chat controls">
+                    <div>
+                        <div class="chat-title">Aura Tutor</div>
+                        <div class="chat-sub">Study helper — math, science, history & writing</div>
+                    </div>
+                    <div class="chat-controls" role="group" aria-label="Chat actions">
+                        <label for="modelSelect" class="sr-only">Model</label>
+                        <select id="modelSelect" aria-label="Model selection">
+                            <option value="text-bison-001">text-bison-001</option>
+                            <option value="chat-bison-001">chat-bison-001</option>
+                        </select>
+                        <button id="btn-copy" title="Copy conversation">Copy</button>
+                        <button id="btn-clear" title="Clear chat">Clear</button>
+                    </div>
+                </div>
+                <div class="chat-window" id="chatWindow">
+                    <div class="message ai" id="welcomeMsg">Hi — I'm Aura Tutor. I can help you study: ask a question about math, science, history, or writing.</div>
                 </div>
             </div>
         </div>

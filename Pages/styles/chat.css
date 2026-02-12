@@ -224,3 +224,159 @@ textarea::placeholder {
   
         font-size: 2rem;
 }
+
+/* ------------------ Chat UI (ChatGPT-like) ------------------ */
+.chat-wrapper {
+    position: fixed;
+    bottom: 90px; /* above input dock */
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(920px, 92%);
+    max-height: calc(100vh - 220px);
+    z-index: 1100;
+}
+
+.chat-container {
+    background: linear-gradient(180deg, rgba(10,10,10,0.6), rgba(6,6,6,0.75));
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+}
+
+.chat-title { font-weight: 700; color: var(--cream); }
+.chat-sub { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+
+.chat-window {
+    padding: 18px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message {
+    max-width: 78%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    word-wrap: break-word;
+}
+
+.message.ai {
+    align-self: flex-start;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    color: #e9eef6;
+    border: 1px solid rgba(255,255,255,0.03);
+    border-bottom-left-radius: 4px;
+}
+
+.message.user {
+    align-self: flex-end;
+    background: linear-gradient(180deg, var(--user-bubble, rgba(99,102,241,0.85)), rgba(99,102,241,0.95));
+    color: white;
+    border: 1px solid rgba(255,255,255,0.04);
+    border-bottom-right-radius: 4px;
+}
+
+.message .meta { display:block; font-size:0.75rem; color: rgba(255,255,255,0.55); margin-top:6px; }
+
+/* Thinking (three dots) */
+.thinking { display:flex; align-items:center; gap:6px; }
+.thinking .dot { width:8px; height:8px; background:rgba(255,255,255,0.6); border-radius:50%; opacity:0.85; transform:translateY(0); animation: bounce 1s infinite; }
+.thinking .dot:nth-child(2){ animation-delay:0.12s }
+.thinking .dot:nth-child(3){ animation-delay:0.24s }
+@keyframes bounce { 0%{ transform:translateY(0); opacity:0.6 } 50%{ transform:translateY(-6px); opacity:1 } 100%{ transform:translateY(0); opacity:0.6 } }
+
+/* Scrollbar (thin, subtle) */
+.chat-window::-webkit-scrollbar { width:8px; }
+.chat-window::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius:8px; }
+
+/* Responsive adjustments */
+@media (max-width: 700px){
+    .chat-wrapper { bottom: 120px; width: 96%; }
+    .message { max-width: 92%; }
+    .input-dock-wrapper { max-width: 96%; }
+}
+
+/* small animation when new message appears */
+.message { transform-origin: bottom; animation: popIn 220ms ease; }
+@keyframes popIn { from { opacity: 0; transform: translateY(6px) scale(0.995); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+/* header controls (clear, copy, model selector) - minimal styling */
+.chat-controls { margin-left:auto; display:flex; gap:8px; align-items:center; }
+.chat-controls button { background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--cream); padding:6px 8px; border-radius:8px; cursor:pointer; }
+
+/* Focus outline for accessibility */
+.chat-controls button:focus, .icon-only-btn:focus, textarea:focus, select:focus {
+    outline: 3px solid rgba(99,102,241,0.18);
+    outline-offset: 2px;
+}
+
+select#modelSelect { background: rgba(255,255,255,0.02); color:var(--cream); border:1px solid rgba(255,255,255,0.04); padding:6px 8px; border-radius:8px; }
+
+/* small hover states */
+.chat-controls button:hover { transform: translateY(-2px); background: rgba(255,255,255,0.02); }
+
+/* ------------------ Larger Chat (ChatGPT-like scale) ------------------ */
+/* These rules intentionally override the smaller defaults above for bigger screens */
+@media (min-width: 900px) {
+    .chat-wrapper {
+        width: min(1100px, 96%);
+        bottom: 120px;
+        max-height: calc(100vh - 260px);
+    }
+
+    .chat-container {
+        height: 72vh; /* generous vertical space */
+        border-radius: 16px;
+        box-shadow: 0 26px 80px rgba(0,0,0,0.65);
+    }
+
+    .chat-header { padding: 18px 22px; }
+    .chat-title { font-size: 1.2rem; }
+    .chat-sub { font-size: 1rem; }
+
+    .chat-window { padding: 26px 32px; gap: 20px; }
+
+    .message { max-width: 74%; padding: 18px 20px; font-size: 16px; border-radius: 15px; }
+    .message.ai { border-bottom-left-radius: 8px; }
+    .message.user { border-bottom-right-radius: 8px; }
+
+    /* Make bubbles a bit wider on large screens */
+    .message.user { max-width: 60%; }
+    .message.ai { max-width: 68%; }
+
+    /* Input dock expands to match chat width */
+    .input-dock-wrapper { width: min(1100px, 96%); bottom: 28px; }
+    .outer-box { padding: 12px 16px; border-radius: 20px; }
+    .inner-circle-bar { padding: 12px 18px; gap: 16px; }
+    textarea { height: 52px; font-size: 16px; padding: 12px 0; }
+    .icon-only-btn { width: 48px; height: 48px; }
+    .icon-only-btn svg { width: 20px; height: 20px; }
+}
+
+/* Slightly reduce on medium screens but keep spacing */
+@media (min-width: 700px) and (max-width: 899px) {
+    .chat-wrapper { width: min(920px, 96%); bottom: 110px; }
+    .chat-container { height: 64vh; }
+    .chat-window { padding: 22px 26px; }
+    .message { font-size: 15px; padding: 14px 16px; }
+    .input-dock-wrapper { width: min(920px, 96%); }
+}
+
+

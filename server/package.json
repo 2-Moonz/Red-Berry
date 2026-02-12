@@ -13,6 +13,7 @@
     "passport-google-oauth20": "^2.0.0",
     "uuid": "^9.0.0",
     "express-session": "^1.17.3",
-    "bcryptjs": "^2.4.3"
+    "bcryptjs": "^2.4.3",
+    "axios": "^1.4.0"
   }
 }
