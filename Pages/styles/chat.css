@@ -289,8 +289,6 @@ html, body {
   color: #f2ecff;
   font-size: 18px;
   position: relative; 
-  /* Allow the content panel to scroll if injected quiz HTML is tall */
-  overflow: auto;
 }
 
 /* Tool Container Positioning */
@@ -372,9 +370,6 @@ html, body {
     box-shadow: none;
     /* Adjusted margin-top so content isn't under the absolute button */
     margin-top: 40px; 
-  /* Make the injected HTML scrollable within the content panel */
-  max-height: calc(72vh - 180px);
-  overflow-y: auto;
 }
 
 /* Style when editing is active */
@@ -382,4 +377,4 @@ html, body {
     border: 1px solid rgba(255, 255, 255, 0.5);
     background: rgba(0, 0, 0, 0.2);
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-}
+}s
