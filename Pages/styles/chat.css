@@ -113,7 +113,7 @@ html, body {
 }
 
 .chat-panel {
-  flex: 0 0 40%;
+  flex: 0 0 35%;
   display: flex;
   flex-direction: column;
   border-right: 1px solid rgba(255,255,255,0.2);
@@ -204,21 +204,6 @@ html, body {
   padding-top: 25px; 
 }
 
-/* Custom scrollbar for messages and editable content for better UX */
-.messages::-webkit-scrollbar, #editableContent::-webkit-scrollbar {
-  width: 10px;
-}
-.messages::-webkit-scrollbar-track, #editableContent::-webkit-scrollbar-track {
-  background: transparent;
-}
-.messages::-webkit-scrollbar-thumb, #editableContent::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.12);
-  border-radius: 8px;
-}
-.messages::-webkit-scrollbar-thumb:hover, #editableContent::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.18);
-}
-
 .message {
   padding: 10px 14px;
   border-radius: 12px;
@@ -269,12 +254,8 @@ html, body {
   display: flex;
   gap: 8px;
   margin-top: 12px;
-  padding: 12px 16px; 
-  border-top: 1px solid rgba(255,255,255,0.12);
-  /* Stick to the bottom inside the chat-panel for consistent input access */
-  position: sticky;
-  bottom: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding: 16px; 
+  border-top: 1px solid rgba(255,255,255,0.15);
 }
 
 .chat-input input {
@@ -285,12 +266,6 @@ html, body {
   outline: none;
   background: rgba(255,255,255,0.2);
   color: #fff;
-}
-
-/* Visible focus styles for keyboard users */
-.chat-input input:focus, .nav-button:focus, .menu-toggle:focus, .tools-toggle:focus, select:focus, button:focus {
-  outline: 3px solid rgba(123, 58, 255, 0.32);
-  outline-offset: 2px;
 }
 
 .chat-input button {
@@ -402,22 +377,9 @@ html, body {
   overflow-y: auto;
 }
 
-/* Slightly increase font size for content to improve readability */
-#editableContent, .content-panel p {
-  font-size: 18px;
-}
-
 /* Style when editing is active */
 #editableContent[contenteditable="true"] {
     border: 1px solid rgba(255, 255, 255, 0.5);
     background: rgba(0, 0, 0, 0.2);
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-}
-
-/* Responsive adjustments */
-@media (max-width: 900px) {
-  .card { flex-direction: column; height: auto; }
-  .chat-panel { flex: 0 0 auto; width: 100%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
-  .content-panel { width: 100%; }
-  .navbar-card { height: auto; padding: 10px; gap: 8px; }
 }
