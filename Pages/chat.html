@@ -26,6 +26,13 @@
   
       </div>
 
+      <!-- Model selector for choosing which model to use -->
+      <label for="modelSelect" class="sr-only">Model</label>
+      <select id="modelSelect" aria-label="Select AI model" class="nav-button" title="Select model">
+        <option value="gemini-2.5-flash-preview-09-2025">Gemini 2.5 Flash</option>
+        <option value="gemini-1.0">Gemini 1.0</option>
+      </select>
+
       <div class="menu-container">
         <button class="menu-toggle" onclick="toggleDropdown()">
           <i class="fas fa-ellipsis-v"></i>
@@ -42,10 +49,9 @@
     <main class="wrap">
       <section class="card">
         <div class="chat-panel" id="chat"> 
-          <div class="messages">
-            <div class="message received">Hello! How can I help?</div>
-            
-          </div>
+          <div class="messages" role="log" aria-live="polite" aria-atomic="false">
+              <div class="message received">Hello! How can I help?</div>
+            </div>
           
           <div class="message received" id="typing-indicator" style="display:none;">
              <div class="typing-indicator">
@@ -56,21 +62,29 @@
           </div>
           
           <div class="chat-input">
-            <input type="text" placeholder="Type a message..." />
-            <button onclick="sendMessage()">Send</button>
+            <input id="chatInput" type="text" placeholder="Type a message..." aria-label="Message input" />
+            <button id="sendButton" onclick="sendMessage()" aria-label="Send message">Send</button>
           </div>
         </div>
         
         <div class="content-panel" id="content"> 
           <div class="tool-container">
-            <button class="tools-toggle" onclick="toggleToolsDropdown()">
-              <i class="fas fa-tools"></i>
+            <button class="tools-toggle" onclick="toggleToolsDropdown()" aria-haspopup="true" aria-expanded="false" aria-controls="toolsDropdownMenu">
+              <i class="fas fa-tools" aria-hidden="true"></i>
             </button>
-            
-            <div id="toolsDropdownMenu" class="tools-dropdown-content">
-              <a href="#" onclick="toggleEdit(); return false;"><i class="fas fa-pencil-alt"></i> Edit Content</a>
-              <a href="#"><i class="fas fa-share-alt"></i> Share Result</a>
-              <a href="#"><i class="fas fa-file-download"></i> Export Text</a>
+
+            <!-- Quick actions: Copy and Clear -->
+            <button id="btn-copy" class="nav-button" title="Copy quiz content" onclick="copyContent()" aria-label="Copy content">
+              <i class="fas fa-copy"></i>
+            </button>
+            <button id="btn-clear" class="nav-button" title="Clear chat and content" onclick="clearChat()" aria-label="Clear chat">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+
+            <div id="toolsDropdownMenu" class="tools-dropdown-content" role="menu">
+              <a href="#" role="menuitem" onclick="toggleEdit(); return false;"><i class="fas fa-pencil-alt"></i> Edit Content</a>
+              <a href="#" role="menuitem"><i class="fas fa-share-alt"></i> Share Result</a>
+              <a href="#" role="menuitem"><i class="fas fa-file-download"></i> Export Text</a>
             </div>
           </div>
           

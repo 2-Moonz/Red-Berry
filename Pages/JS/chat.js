@@ -106,7 +106,11 @@ if (inputData) {
     quiz_metadata: {
       defaults: { num_questions: 5, difficulty: "medium", topics: [] },
       question_formats: ["multiple_choice", "short_answer"],
-      answer_block: { format: "json", label: "answers", location: "top_html_comment" }
+      answer_block: { format: "json", label: "answers", location: "top_html_comment" },
+      // Request a large runnable sample when producing quiz HTML. This suggests the AI include
+      // at least 400 lines of code (HTML/CSS/JS and comments). The model may still be limited
+      // by the API token limits; if truncated, it should mark truncation clearly.
+      min_lines_of_code: 400
     },
     safety_consistency: {
       privacy: "Do not include personal data beyond what the user provided.",
@@ -149,6 +153,8 @@ if (inputData) {
       
       generateResponse();
       inputData.value = "";
+      // Return focus to the input for quick follow-up
+      try { inputData.focus(); } catch (err) {}
     }
   };
   
@@ -244,6 +250,13 @@ if (inputData) {
         if (contentPanel) {
             contentPanel.innerHTML = Contents.htmlString;
             contentPanel.setAttribute('contenteditable', 'false'); // Reset edit state
+            // Ensure injected HTML is viewable — make content panel scroll to bottom
+            try {
+              contentPanel.style.overflowY = 'auto';
+              contentPanel.scrollTop = contentPanel.scrollHeight;
+            } catch (err) {
+              console.warn('Could not auto-scroll content panel:', err);
+            }
         } else {
              // Fallback to updating the whole content panel if structure changes
             document.querySelector(".content-panel").innerHTML =
@@ -300,6 +313,57 @@ if (inputData) {
       sendMessage(e);
     }
   });
+
+  // Support Ctrl+Enter to send and Esc to blur the input
+  inputData.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      const userMessage = e.target.value.trim();
+      if (userMessage) {
+        sendMessage(e);
+      }
+    } else if (e.key === 'Escape') {
+      e.target.blur();
+    }
+  });
+
+  // Copy content of the editable panel to clipboard
+  window.copyContent = async function copyContent() {
+    const contentPanel = document.getElementById('editableContent');
+    if (!contentPanel) return;
+    const text = contentPanel.innerText || contentPanel.textContent || '';
+    try {
+      await navigator.clipboard.writeText(text);
+      // Visual feedback: temporarily change button text/title
+      const btn = document.getElementById('btn-copy');
+      if (btn) {
+        const old = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i>';
+        setTimeout(() => btn.innerHTML = old, 1200);
+      }
+    } catch (err) {
+      console.warn('Copy failed, trying fallback', err);
+      // Fallback: create textarea
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      ta.remove();
+    }
+  };
+
+  // Clear chat messages and reset editable content
+  window.clearChat = function clearChat() {
+    const messagesContainer = document.querySelector('.chat-panel .messages');
+    if (messagesContainer) messagesContainer.innerHTML = '';
+    const contentPanel = document.getElementById('editableContent');
+    if (contentPanel) contentPanel.innerHTML = '<p>Responses or other content will appear here.</p>';
+    // Reset appData
+    appData.userMessages = [];
+    appData.botMessages = [];
+    // Focus the input for a new conversation
+    try { inputData.focus(); } catch (err) {}
+  };
 } else {
     console.error("Chat input element not found. Chat functionality disabled.");
 }
