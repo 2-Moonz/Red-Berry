@@ -116,14 +116,13 @@
         }
 
         .nav-links i {
-            color: var(--cream);
             font-size: 1.1rem;
             cursor: pointer;
             transition: color 0.3s;
         }
 
         .nav-links i:hover {
-            color: var(--purple);
+            color: var(--orange);
         }
 
         /* --- Layout Structure --- */
@@ -344,7 +343,7 @@
             .footer-main {
                 flex-direction: column;
                 text-align: center;
-                color: #686767;
+                color: #a62525;
             }
 
             .footer-col {
@@ -379,7 +378,5 @@
         animation: slideIn 0.4s ease-out;
     }
     
-    
     .votes i { cursor: pointer; transition: 0.2s; }
     .votes i:hover { color: #ff4b2b; }
-   

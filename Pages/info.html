@@ -3,178 +3,41 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Red berry — Info & Rules</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <style>
-    /* Grundläggande inställningar */
-    :root {
-      --bg: #0d0d0f;
-      --card-bg: #16161a;
-      --accent: #ff4757; /* En bär-röd färg för Red Berry temat */
-      --cream: #f0f0f5;
-      --text-muted: #9494a3;
-      --border: #2d2d35;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--cream);
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      line-height: 1.6;
-      margin: 0;
-      padding: 0;
-    }
-
-    main {
-      max-width: 800px;
-      margin: 60px auto;
-      padding: 20px;
-    }
-
-    /* Header styling */
-    h1 {
-      font-size: 2.5rem;
-      letter-spacing: -1px;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    h1 i {
-      color: var(--accent);
-      font-size: 0.8em;
-    }
-
-    .subtitle {
-      color: var(--text-muted);
-      font-size: 1.1rem;
-      margin-bottom: 40px;
-    }
-
-    /* Snygga boxar för sektioner */
-    section {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 25px;
-      margin-bottom: 25px;
-      transition: transform 0.2s ease;
-    }
-
-    section:hover {
-      border-color: var(--accent);
-    }
-
-    h2 {
-      margin-top: 0;
-      font-size: 1.4rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--accent);
-    }
-
-    /* List styling */
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      margin-bottom: 12px;
-      padding-left: 25px;
-      position: relative;
-    }
-
-    li::before {
-      content: "→";
-      position: absolute;
-      left: 0;
-      color: var(--accent);
-    }
-
-    /* Länkar */
-    a {
-      color: var(--cream);
-      text-decoration: none;
-      border-bottom: 1px solid var(--accent);
-      transition: opacity 0.2s;
-    }
-
-    a:hover {
-      opacity: 0.7;
-    }
-
-    /* Footer */
-    footer {
-      margin-top: 50px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      text-align: center;
-    }
-
-    /* Badge för regler */
-    .rule-number {
-      background: var(--accent);
-      color: white;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      margin-right: 10px;
-      font-weight: bold;
-    }
-  </style>
+  <title>Aura — Info</title>
+  <link rel="stylesheet" href="/Pages/styles/styles.css">
+  <link rel="stylesheet" href="/Pages/styles/red-berry.css">
+  <link rel="stylesheet" href="/Pages/styles/styles.css">
 </head>
-<body>
+<body style="background:var(--bg); color:var(--cream); font-family:Inter, sans-serif;">
+  <main style="max-width:900px; margin:40px auto; padding:20px;">
+    <h1>Aura — About & Info</h1>
+    <p>Aura is a lightweight community feed designed for night-owl creators and readers. This info page collects links and standing policies for the site.</p>
 
-  <main>
-    <header>
-      <h1><i class="fa-solid fa-moon"></i> Aura — About & Info</h1>
-      <p class="subtitle">A lightweight community feed for night-owl creators. Shared creativity, after hours.</p>
-    </header>
-
-    <section id="explore">
-      <h2><i class="fa-solid fa-compass"></i> Explore</h2>
+    <section style="margin-top:20px;">
+      <h2>Explore</h2>
       <ul>
-        <li>Return to the <a href="./red-berry.html">Home Feed</a> to see latest posts.</li>
-        <li>Browse our <a href="./Index.html">Home page</a> (including Red Berry).</li>
-        <li>Learn about our <a href="#community">Community Values</a> below.</li>
+        <li><a href="/Pages/red-berry.html">Home feed</a></li>
+        <li><a href="/Pages/info.html#themes">Themes</a></li>
+        <li><a href="/Pages/info.html#community">Community guidance</a></li>
       </ul>
     </section>
 
-    <section id="community">
-      <h2><i class="fa-solid fa-scale-balanced"></i> Community Rules</h2>
-      <p>To keep Aura a safe place for creators, we ask everyone to follow these simple guidelines:</p>
-      <ul>
-        <li><span class="rule-number">01</span> <strong>Respect the Craft:</strong> Be kind to other creators. Constructive feedback is welcome, hate speech is not.</li>
-        <li><span class="rule-number">02</span> <strong>Credit the Source:</strong> If you share someone else's work, always provide a link to the original creator.</li>
-        <li><span class="rule-number">03</span> <strong>Keep it Cozy:</strong> Aura is a "night-mode" community. Avoid spamming or high-frequency automated posting.</li>
-        <li><span class="rule-number">04</span> <strong>Moderation:</strong> Community owners have the final say in their respective feeds.</li>
-      </ul>
+    <section id="community" style="margin-top:18px;">
+      <h2>Community</h2>
+      <p>To create or moderate communities you must be logged in. Community owners can remove posts and manage members.</p>
     </section>
 
-    <section id="support">
-      <h2><i class="fa-solid fa-robot"></i> Support & System</h2>
-      <p>Aura is currently in <strong>Developer Preview</strong>. If you encounter a bug or a "robot" behaving badly:</p>
-      <ul>
-        <li>Reports can be sent via the <a href="mailto:admin@aura.demo">Admin Dashboard</a>.</li>
-        <li>Check the <a href="#">System Status</a> for server maintenance updates.</li>
-      </ul>
+    <section id="support" style="margin-top:18px;">
+      <h2>Support</h2>
+      <p>For help or to report abuse, please contact the site administrators (this demo uses a local server).</p>
     </section>
 
-    <section id="legal">
-      <h2><i class="fa-solid fa-shield-halved"></i> Privacy & Terms</h2>
-      <p>We believe in privacy. Aura does not track your data for ads. Your posts are yours, and you can delete your account and data at any time from the settings menu.</p>
+    <section id="legal" style="margin-top:18px;">
+      <h2>Legal</h2>
+      <p>Privacy and terms are provided as sample text for the project demo.</p>
     </section>
 
-    <footer>
-      <p>© 2026 Aura Media — Built for the creators of the night.</p>
-    </footer>
+    <p style="margin-top:30px; font-size:0.9rem; color:#aaa;">© 2026 Aura Media</p>
   </main>
-
 </body>
 </html>

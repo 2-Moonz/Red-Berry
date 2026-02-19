@@ -56,11 +56,6 @@
             transition: opacity 0.3s;
         }
 
-        img{
-            width:100px;
-            color:white;
-        }
-
         .nav-links a:hover {
             opacity: 0.7;
         }
@@ -240,39 +235,3 @@
            font-weight: normal;
            font-style: normal;
         }
-        .nav-button {
-            background: none;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #fff;
-            font-size: 1.5em;
-            font-weight: 1000;
-            border-radius: 8px;
-            padding: 8px 100px;
-            cursor: pointer;
-            transition: background 0.2s ease, border-color 0.2s ease;
-            text-decoration: none; /* Make buttons also work as links */
-            display: flex;
-            align-items: center;
-          }
-          .nav-button:hover {
-            background: rgba(255, 255, 255, 0.58);
-            border-color: #fff;
-          }
-          .nav-button2 {
-            background: none;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #fff;
-            font-size: 1.5em;
-            font-weight: 1000;
-            border-radius: 8px;
-            padding: 8px 66px;
-            cursor: pointer;
-            transition: background 0.2s ease, border-color 0.2s ease;
-            text-decoration: none; /* Make buttons also work as links */
-            display: flex;
-            align-items: center;
-          }
-          .nav-button2:hover {
-            background: rgba(255, 255, 255, 0.58);
-            border-color: #fff;
-          }
