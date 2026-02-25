@@ -191,7 +191,25 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
 // AI keys and model (comma-separated keys in GEMINI_KEYS)
 const GEMINI_KEYS_RAW = process.env.GEMINI_KEYS || '';
 const GEMINI_KEYS = GEMINI_KEYS_RAW.split(',').map(s => s.trim()).filter(Boolean);
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'text-bison-001';
+// Primary model and optional fallbacks. Use GEMINI_MODEL for primary and
+// GEMINI_MODEL_FALLBACKS (comma-separated) for fallback candidates.
+const GEMINI_MODEL = (process.env.GEMINI_MODEL || 'text-bison-001').trim();
+const GEMINI_MODEL_FALLBACKS_RAW = process.env.GEMINI_MODEL_FALLBACKS || '';
+const GEMINI_MODEL_FALLBACKS = GEMINI_MODEL_FALLBACKS_RAW
+  .split(',')
+  .map(s => String(s || '').trim())
+  .filter(Boolean);
+
+// Build a prioritized list of candidate models to try (primary first)
+function candidateModelsList(requested) {
+  const list = [];
+  if (requested) list.push(requested);
+  if (GEMINI_MODEL) list.push(GEMINI_MODEL);
+  for (const m of GEMINI_MODEL_FALLBACKS) if (!list.includes(m)) list.push(m);
+  // Ensure at least one safe fallback exists
+  if (!list.includes('text-bison-001')) list.push('text-bison-001');
+  return list;
+}
 
 // POST /api/ai { prompt: string, model?: string }
 app.post('/api/ai', async (req, res) => {
@@ -207,42 +225,69 @@ When producing a quiz sample, include at least 400 lines of code (this may inclu
 
   const fullPrompt = systemInstruction + "\n\nUser: " + userPrompt;
 
+  // Determine requested model from client (if present). Sanitize common forms.
+  let requestedModel = '';
+  if (req.body && req.body.model) requestedModel = String(req.body.model).trim();
+
+  // Strip any leading 'models/' or URL fragments that might have been provided
+  const sanitizeModel = (m) => {
+    if (!m) return m;
+    // examples to strip: 'models/gemini-2.5-...' or full URL pieces
+    return m.replace(/^\s*models\//i, '').replace(/^(?:https?:\/\/)?[\w.-]*\/models\//i, '').trim();
+  };
+
+  const candidates = candidateModelsList(sanitizeModel(requestedModel));
+
   let lastErr = null;
+
+  // Try each API key and for each key try the candidate models in order until one succeeds.
   for (const key of GEMINI_KEYS) {
-    try {
-      const modelToUse = (req.body && req.body.model) ? String(req.body.model) : GEMINI_MODEL;
-      const url = `https://generativelanguage.googleapis.com/v1beta2/models/${encodeURIComponent(modelToUse)}:generateText?key=${encodeURIComponent(key)}`;
-      const body = {
-        prompt: { text: fullPrompt },
-        temperature: 0.2,
-    // Request a larger output; actual max depends on the model. If you hit limits, the model may truncate.
-    maxOutputTokens: 8000
-      };
-      const apiRes = await axios.post(url, body, { timeout: 20000 });
-      if (apiRes && apiRes.data) {
-        let text = '';
-        if (apiRes.data.candidates && apiRes.data.candidates.length) {
-          text = apiRes.data.candidates.map(c => c.output || c).join('\n');
-        } else if (apiRes.data.output && apiRes.data.output[0] && apiRes.data.output[0].content) {
-          text = apiRes.data.output.map(o => o.content).join('\n');
-        } else if (typeof apiRes.data.result === 'string') {
-          text = apiRes.data.result;
-        } else {
-          text = JSON.stringify(apiRes.data);
+    for (const candidateModelRaw of candidates) {
+      const modelToUse = sanitizeModel(candidateModelRaw) || 'text-bison-001';
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta2/models/${encodeURIComponent(modelToUse)}:generateText?key=${encodeURIComponent(key)}`;
+        const body = {
+          prompt: { text: fullPrompt },
+          temperature: 0.2,
+          // Request a larger output; actual max depends on the model. If you hit limits, the model may truncate.
+          maxOutputTokens: 8000
+        };
+
+        console.log(`Calling AI: key=<hidden> model=${modelToUse}`);
+        const apiRes = await axios.post(url, body, { timeout: 20000 });
+        if (apiRes && apiRes.data) {
+          let text = '';
+          if (apiRes.data.candidates && apiRes.data.candidates.length) {
+            text = apiRes.data.candidates.map(c => c.output || c).join('\n');
+          } else if (apiRes.data.output && apiRes.data.output[0] && apiRes.data.output[0].content) {
+            text = apiRes.data.output.map(o => o.content).join('\n');
+          } else if (typeof apiRes.data.result === 'string') {
+            text = apiRes.data.result;
+          } else {
+            text = JSON.stringify(apiRes.data);
+          }
+          return res.json({ text, model: modelToUse });
         }
-        return res.json({ text });
+      } catch (err) {
+        lastErr = err;
+        const status = err && err.response && err.response.status;
+        const errText = err && err.response && err.response.data ? JSON.stringify(err.response.data) : (err && err.message) || String(err);
+        console.warn(`AI attempt failed (model=${modelToUse}) status=${status} err=${errText}`);
+
+        // If this was a 404 or model-not-found style error, try the next candidate model with the same key.
+        if (status === 404 || (err && err.response && err.response.data && String(err.response.data).toLowerCase().includes('model'))) {
+          // try next model candidate
+          continue;
+        }
+
+        // For other errors (quota, auth, network), break to the next key
+        break;
       }
-    } catch (err) {
-      lastErr = err;
-      const status = err && err.response && err.response.status;
-      console.warn('AI key failed', status || err.message);
-      // for common recoverable errors try next key
-      continue;
     }
   }
 
-  console.error('All AI keys failed', lastErr && lastErr.message);
-  return res.status(502).json({ error: 'ai_service_unavailable', detail: (lastErr && lastErr.message) || 'all keys failed' });
+  console.error('All AI keys/models failed', lastErr && lastErr.message);
+  return res.status(502).json({ error: 'ai_service_unavailable', detail: (lastErr && lastErr.message) || 'all keys/models failed' });
 });
 
 const PORT = process.env.PORT || 3000;
