@@ -50,8 +50,10 @@ window.onclick = function(event) {
 
 // --- Chat/API Logic (from first JS block) ---
 
-const API_KEY = "AIzaSyBLhwg6AUUNLLl_qL2_I921NHS1TmCEhQA"; // Leave as empty string for Canvas environment
-const API_MODEL = "gemini-2.5-flash-preview-09-2025";
+// --- Chat/API Logic ---
+
+const API_KEY = "AIzaSyDtg3c590yyegkeHEiL8-UfWajQRFa_Z5I"; // Ensure this is a valid key
+const API_MODEL = "gemini-1.5-flash"; // Changed from 2.5 to 1.5
 let MAX_RETRIES = 5;
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${API_KEY}`;
 
